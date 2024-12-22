@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Page</title>
+    <link rel="stylesheet" href='../static/css/coding_styles.css'>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs/loader.min.js"></script>
+    <script src="../static/js/coding_page.js" defer></script>  
+</head>
+<body>
+    <header>
+    </header>
+    <main>
+        <div id = "question_box">
+            <div id = 'question'></div>
+        </div>
+        <button id="submit_code">Submit</button>
+        <button class="mic-button" id="micButton">  
+            <img src="{{ url_for('static', filename='images/microphone_img.png') }}" alt="Mic Icon">
+            <div class="overlay" id="micOverlay"></div>
+        </button>        
+        <div id="editor"></div>
+    </main>
+    <footer>
+        <p style="position: absolute; top: 920px;">&copy; 2024 Mock SWE Interviewer</p>
+    </footer>  
+</body>
+</html>
