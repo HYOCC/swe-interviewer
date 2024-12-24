@@ -34,7 +34,7 @@ def flask_start():
 # First page that renders when flask starts
 @flask_app.route('/')
 def home():
-    return render_template('coding_page.html')
+    return render_template('main_page.html')
 
 # Sends the coding question to html
 @flask_app.route('/question')
@@ -117,18 +117,23 @@ def receive_speech_data():
     
     print(f'Received speech data: {speech} | receive_speech_data\n') # Log
     
-
     # Process speech to general AI to know what function to be called
     response = general_ai.send_message_general_ai(speech)    
     
     # Check if ai called any function or just a normal message
     if response.choices[0].message.tool_calls:
         tool_call = response.choices[0].message.tool_calls[0].function.name
+        
         print(f'Running function: {response} | receive_speech_data\n')# Log 
+        
         eval(response + '()')
+        
         print(f'tool call was called by ai: {tool_call} | send_message_general_ai\n')# Log 
+        
     else:
+        
         print(f'No tool call response was called by ai: {response.choices[0].message.content} | send_message_general_ai\n')
+        
         voice.create_audio(response.choices[0].message.content)
     
     return jsonify({'status':'received'}) 
@@ -182,7 +187,8 @@ if __name__ == "__main__":
     flask_thread.start()
     
     # Creates webview for easier access
-    create_webview()
+    #create_webview()
+    
     # No other code will run below this as create_webview will keep running however any server ran function will still be ran
     
     

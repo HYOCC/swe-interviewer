@@ -1,0 +1,1 @@
+google.cloud, flask, webview, threading, time, requests, wave, os, openai, dotenv

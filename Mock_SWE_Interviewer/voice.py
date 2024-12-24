@@ -20,7 +20,7 @@ def create_audio(text:str):
     voice_response = text_speech_client.synthesize_speech(input=synthesis_input, voice=voice, audio_config=audio_config)
     
     # File directory for storing audio 
-    output_file = 'audio_data/output.wav'
+    output_file = 'static/audio_data/output.wav'
 
     # Static file, removes and adds a new one everytime
     if os.path.exists(output_file): 

@@ -1,8 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
+    let editor = null;
     /// For visual studio code editor
     require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs' }});
     require(['vs/editor/editor.main'], function() {
-        var editor = monaco.editor.create(document.getElementById('editor'), {
+        editor = monaco.editor.create(document.getElementById('editor'), {
             value: '',
             language: 'python',
             theme: 'vs-dark'
@@ -30,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } // need to send it to python backend
         console.log(window.transcriptText); // console is successfully logging the transcript
     }
+
     /// Gets each chunk of the question and displays it on the page slowly. Acts like chatgpt texting style
     var total_questions = '' 
     var total_format = ''
@@ -46,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
         total_questions = '';
         generated_question = true;
         var format_source = new EventSource('/format');
+
         format_source.onmessage = function(event) {
             // in progress 
             total_format += event.data;
@@ -63,13 +66,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const micOverlay = document.getElementById("micOverlay");
     const micButton = document.getElementById("micButton");
     let isListening = false;
+    let audioContext = null;
+    let analyser = null;
+
     // Get the mic input and start the mic
     async function get_mic(){
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         micButton.style.display = 'block';
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const analyser = audioContext.createAnalyser();
-        const source = audioContext.createMediaStreamSource(stream);
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        var source = audioContext.createMediaStreamSource(stream);
         source.connect(analyser);
         analyser.fftSize = 256;
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
@@ -117,7 +123,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 body: JSON.stringify(window.transcriptText) 
             })
                 .then(response => response.json())
-                
+                .then(data => {
+                    // clear all audio setting from microphone which was previously used
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)(); 
+                    analyser = audioContext.createAnalyser();
+                    analyser.fftSize = 1024;
+
+                    console.log('Response received from Flask | /speech_data') // Log
+                    const audio = new Audio(`/static/audio_data/output.wav?timestamp=${new Date().getTime()}`);
+                    const source = audioContext.createMediaElementSource(audio);
+                    source.connect(analyser);
+                    analyser.connect(audioContext.destination);
+                    audio.play(); // play audio 
+                })
         } else {
             start_overlay();
             request_animation_frame = requestAnimationFrame(update_overlay); // Start updating the overlay

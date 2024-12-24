@@ -106,7 +106,7 @@ class coding_ai(ai):
             stream=True # Enable streaming for smaller chunks
         )
         
-        return completion 
+        return completion # returns answers in iterators 
     
     def record_ai_response(self, response): 
         print(f'logging ai_response: {response} | record_ai_response\n')# Log
@@ -136,7 +136,7 @@ class formatter_question(ai):
             ],
             stream=True # Enable streaming for smaller chunks
         )
-        return completion 
+        return completion # returns answers in iterators 
 
 
 class advisor_ai(ai):

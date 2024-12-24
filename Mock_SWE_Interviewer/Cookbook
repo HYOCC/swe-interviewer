@@ -1,0 +1,43 @@
+To do 
+
+- need to create function calling for openAI  to call
+- integrate speech to text from js send to python which is sent to openAI and have openai decide for any function calling
+- for fun: Add gerald back
+- behavioral AI for the first part of the interview such as the experience the projects and also how the user responds
+- two step, behavioral, and technical.
+
+
+    <script>
+        // Testing purposes
+        // plan: add start button or some sort of starting initilzation that the user does to start the process
+        // This also works as asking a new question  
+        restart = document.getElementById('submit_code') 
+        restart.addEventListener('click', ()=> {
+            editor.setValue('');
+
+            var question_source = new EventSource('/question');
+            question_source.onmessage = function(event) { 
+                total_questions += event.data; 
+                document.getElementById('question').innerHTML = total_questions;
+            };
+            
+            question_source.addEventListener('end', function(event){
+                question_source.close(); 
+                total_questions = '';
+                finished_generating = true;
+                var format_source = new EventSource('/format');
+                format_source.onmessage = function(event) {
+                    // in progress 
+                    total_format += event.data;
+                    total_format = total_format.split('\\n').join('\n')
+                    editor.setValue(total_format);
+                };
+    
+                format_source.addEventListener('end', function(event){
+                    format_source.close();
+                    total_format = '';
+                })
+            })
+        });
+        
+    </script>
