@@ -1,0 +1,10 @@
+Coding Interview 
+
+
+Developed a full-stack web application designed to assist students in preparing for Software Engineering roles, featuring a login system and an interactive coding environment.
+
+Engineered a secure login system using MySQL for user authentication and management, implementing encryption algorithms to safeguard user passwords and enhance security
+
+Built an AI-driven coding round page that generates algorithmic questions dynamically and incorporates real-time AI feedback and voice-based interaction to simulate technical interviews.
+
+Integrated a browser-based code editor, allowing users to write and execute code directly within the platform. This streamlined the coding process, improved accessibility for programmatic access to user-generated code, and boosted user engagement by 50% by removing reliance on external tools like VS Code

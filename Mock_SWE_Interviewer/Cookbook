@@ -1,10 +1,27 @@
 To do 
 
+
+- Dash board with adding resume, putting in job descirpotoin to start simulation, records ot he simulation like the resulst 
 - need to create function calling for openAI  to call
 - integrate speech to text from js send to python which is sent to openAI and have openai decide for any function calling
 - for fun: Add gerald back
 - behavioral AI for the first part of the interview such as the experience the projects and also how the user responds
 - two step, behavioral, and technical.
+
+
+currently doing:
+
+dashboard_page:
+    - History Button 
+    - Start button for starting the interview 
+    - Resume input
+
+
+
+
+
+
+
 
 
     <script>

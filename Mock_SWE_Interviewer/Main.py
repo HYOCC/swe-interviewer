@@ -1,10 +1,13 @@
 from flask import Flask, render_template, Response, request, jsonify
 import webview 
 import threading
-import openAI_file 
 import time 
-import requests
-import voice
+
+# Our own files
+import ai_function.openAI_file as openAI_file
+import login_db.user_database as user_database
+import voice_function.voice as voice
+
 
 # Setting functioncall params
 tools = [
@@ -35,6 +38,16 @@ def flask_start():
 @flask_app.route('/')
 def home():
     return render_template('main_page.html')
+
+# loads the coding page 
+@flask_app.route('/coding_page')
+def coding_page():
+    return render_template('coding_page.html')
+
+# Loads the dashboard page
+@flask_app.route('/dashboard_page')
+def dashboard_page():
+    return render_template('dashboard_page.html')
 
 # Sends the coding question to html
 @flask_app.route('/question')
@@ -129,7 +142,6 @@ def receive_speech_data():
         eval(response + '()')
         
         print(f'tool call was called by ai: {tool_call} | send_message_general_ai\n')# Log 
-        
     else:
         
         print(f'No tool call response was called by ai: {response.choices[0].message.content} | send_message_general_ai\n')
@@ -151,6 +163,40 @@ def get_user_code():
     
     return jsonify({'user_code': 'receieved'})
 
+@flask_app.route('/get_login_info', methods = ['POST'])
+def get_login_info():
+    data = request.json 
+    
+    user = data.get('username')
+    password = data.get('password')
+    
+    print(f'Received login info from html:\nUser: {user} Password: {password} | get_login_info')# log
+    
+    result = user_database.check_data(user, password)
+    
+    if result:
+        print('sucess in validating credentials | get_login_info')# Log
+        return jsonify({'status': 'Success'})
+    else:
+        print('failed in verifying credentials | get_login_info')# Log 
+        return jsonify({'status': 'Credentials Wrong'})
+    
+@flask_app.route('/get_register_info', methods = ['POST'])
+def get_register_info():
+    data = request.json
+
+    user = data.get('username')
+
+    # Checks that the user doesnt exist
+    
+    if not(user_database.check_for_user(user)):
+        password = data.get('password')
+        print(f'Received register info from html:\nUser: {user} Password: {password} | get_login_info')# Log
+        user_database.insert_data(user, password)# Inserts the data into the user sql db
+        return jsonify({'status' : 'success'})
+    else:
+        return jsonify({'status': 'User already exists'})
+    
 # Process for advisor AI 
 def process_advising_ai():
     
@@ -169,7 +215,8 @@ def process_advising_ai():
 
 # Creates the webview and starts it
 def create_webview():
-    webview.create_window('Main', "http://127.0.0.1:5000/", fullscreen=True)
+    print('Creating webview | create_webview')
+    webview.create_window('Main', "http://127.0.0.1:5000/")
     webview.start()
 
 
@@ -178,7 +225,7 @@ if __name__ == "__main__":
     # initializes coding ai for the job that the user is preparing for
     description = input('description of the job?: ')   
     preferred_lang = input('preferred coding lang?: ') 
-    coding_ais = openAI_file.coding_ai(preferred_lang, description)
+    coding_ais = openAI_file.coding_ai(description, preferred_lang)
     advising_ais = openAI_file.advisor_ai() 
     general_ai = openAI_file.ai(description) #implement all possible functions that the ai has
     
@@ -187,7 +234,7 @@ if __name__ == "__main__":
     flask_thread.start()
     
     # Creates webview for easier access
-    #create_webview()
+    create_webview()
     
     # No other code will run below this as create_webview will keep running however any server ran function will still be ran
     

@@ -1,0 +1,164 @@
+body{
+    background-color: rgb(14, 13, 13);
+    height: 100vh;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#start_container{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Start at the top */
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+#start_button{
+    cursor: pointer;
+    font-size: 6rem;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.688); 
+    filter: blur(5px); /* Initial blur */
+    animation: moveToCenter 1.5s forwards 1;
+    position: relative;
+    top: 40%;
+    z-index: 1;
+    height: 10vh;
+    width: 10%;
+    margin-right: 5%;
+    margin-left: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;  
+    left:0%;
+    transition: font-weight .5s ease, color .5s ease, left 1.5s ease;
+}
+
+#start_button.slide {
+    left: -100%;
+}
+
+#preference_container{
+    position: absolute;
+    background-color: rgb(55, 55, 55);
+    width: 30%;
+    height: 60%;
+    border-radius: 5%;
+    top:20%;
+    right:-100%;
+    transition: right 1.5s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+
+#preference_container.slide{
+    right : 35%;
+}
+
+#upper_container {
+    position: absolute;
+    display: flex;
+    justify-content: flex-end; /* Align to the right */
+    align-items: center; /* Align to the top */
+    right: 3%;
+    height: 4%;
+    width: 100%;
+    
+}
+
+#history_button, #profile_button, #resources_button, #home_button{
+    height: 5%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: transparent;
+    border: none;
+    color: rgba(192, 190, 190, 0.888); /* White color with 50% opacity */
+    padding-right: 2%;
+    padding-bottom: 0%;
+    transition: color .5s ease;
+}
+
+
+@keyframes moveToCenter {
+    0% {
+        opacity: 0;
+        transform: translateY(-150%);
+        filter: blur(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+#history_button.highlight, #profile_button.highlight, #resources_button.highlight, #home_button.highlight{
+    font-weight: bold;
+    color: white;
+}
+
+#history_button:hover, #profile_button:hover, #resources_button:hover, #home_button:hover{
+    font-weight: bolder;
+    color: white;
+}
+
+#start_button:hover {
+    color: white;
+}
+
+#rectangle {
+    position: absolute;
+    background-color: rgb(27, 26, 26);
+    width: 90%; /* Example width */
+    height: 90%; /* Example height */
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 1%;
+    overflow: hidden;
+}
+
+#company {
+    position: absolute;
+    left: 25%;
+    width: 60%;   
+    top:3%;
+}
+
+#company_label {
+    color: rgb(255, 255, 255);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    position: absolute;
+    left: 2%;
+    top:3%;
+}
+
+#job_description { 
+    position: absolute;
+    bottom: 5%;
+    width: 80%;
+    height: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    resize: none;
+    border-radius: 3%;
+}
+
+
+#job_description_label {
+    position: absolute;
+    bottom: 63%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgb(255, 255, 255);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+}
+
